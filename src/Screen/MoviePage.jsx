@@ -1,11 +1,28 @@
-import React, { useState } from "react";
-import Filter from "../Compnents/Filter";
+import React, { useEffect, useState } from "react";
+// import Filter from "../Compnents/Filter";
 import Layout from "../Layout/Layout";
-import { Movies } from "../Data/MovieData";
 import Movie from "../Compnents/Movie";
 import {ImSpinner} from 'react-icons/im'
 
 function MoviePage() {
+  const [movies,setMovies] = useState([]);
+  useEffect(()=>{
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NmQ0YTg5MWZhYTU5N2JmZjRjMGEyOTk5NjlkYWVkNyIsInN1YiI6IjY1NDcyY2JkNmJlYWVhMDEyYzhlOWFmZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vg9PPpNkGZ9WJNJ2ay0ND4FbZNqO8zaCRhogD9w_Ly4'
+      }
+    };
+    
+    fetch('https://api.themoviedb.org/3/trending/all/day?language=en-US', options)
+      .then(response => response.json())
+      .then(data => {
+        setMovies(data.results)
+        console.log(data)
+      })
+      .catch(err => console.error(err));
+  },[])
   const maxPage = 5;
   const [page, setPage] = useState(maxPage);
   const HandleLoadingMore = () => {
@@ -14,13 +31,13 @@ function MoviePage() {
   return (
     <Layout>
       <div className="min-height-screen container mx-auto px-2 my-6">
-        <Filter />
+        {/* <Filter /> */}
         <p className="text-lg font-medium my-6">
-          Total <span className="font-bold text-submain">{Movies?.length}</span>
+          Total <span className="font-bold text-submain">{movies?.length}</span>
           {""} item found
         </p>
         <div className="grid sm:mt-6 xl:grid-cols-4 2xl:grid-cols-5 lg:grid-cols-3 sm:grid-cols-2 gap-6">
-          {Movies.slice(0,page)?.map((movie, index) => (
+          {movies.slice(0,page)?.map((movie, index) => (
             <Movie key={index} movie={movie} />
           ))}
         </div>

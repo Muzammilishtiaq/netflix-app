@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import Titles from "./Titles";
 import { VscBookmark,VscHeartFilled } from 
@@ -15,6 +15,24 @@ import { Movies } from "../../Data/MovieData";
 import Star from "./Star";
 
 function TopRates() {
+  const [rated, setRated] = useState([]);
+  useEffect(() => {
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NmQ0YTg5MWZhYTU5N2JmZjRjMGEyOTk5NjlkYWVkNyIsInN1YiI6IjY1NDcyY2JkNmJlYWVhMDEyYzhlOWFmZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vg9PPpNkGZ9WJNJ2ay0ND4FbZNqO8zaCRhogD9w_Ly4'
+      }
+    };
+
+    fetch('https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1', options)
+      .then(response => response.json())
+      .then((data) => {
+        setRated(data.results)
+        console.log(data.results)
+      })
+      .catch(err => console.error(err));
+  }, [])
   const [nextEl, setnextEl] = useState(null);
   const [prevEl, setprevEl] = useState(null);
 const className='hover:bg-dry transition text-sm rounded w-8 h-8 flex-colo bg-submain text-white'
@@ -55,17 +73,17 @@ const className='hover:bg-dry transition text-sm rounded w-8 h-8 flex-colo bg-su
           modules={[Autoplay]}
         >
 {
-  Movies.map((movie,index)=>(
+  rated.map((movie,index)=>(
     <SwiperSlide key={index} >
       <div className="p-4 h-rate hovered border border-border bg-dry rounded-lg overflow-hidden ">
-<img src={movie.image} alt="" className="w-full h-full object-cover rounded-lg "  />
+<img src={`https://image.tmdb.org/t/p/original${movie.poster_path}`} alt="" className="w-full h-full object-cover rounded-lg "  />
 <div className="flex flex-col hoveres justify-center items-center px-4 gap-6 text-center absolute bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0">
   <button className="px-4 w-12 h-12  transition hover:bg-submain rounded-full bg-white bg-opacity-30 text-white">
     <VscHeartFilled/>
   </button>
-  <Link className="font-semibold text-xl trancuted line-clamp-2 " to={movie.name}>{movie.name}</Link>
+  <Link className="font-semibold text-xl trancuted line-clamp-2 " to={movie.id}>{movie.title}</Link>
   <div className="flex gap-2 text-star">
-    <Star value={movie.rate}/>
+    <Star value={movie.vote_average}/>
   </div>
 </div>
       </div>

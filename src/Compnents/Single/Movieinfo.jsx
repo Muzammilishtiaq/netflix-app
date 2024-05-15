@@ -8,15 +8,15 @@ function Movieinfo({ movie }) {
   return (
     <div className="w-full xl:h-screen relative text-white">
       <img
-        src={movie?.image}
-        alt={movie.name}
+        src={`https://image.tmdb.org/t/p/original${movie?.backdrop_path}`}
+        alt={movie?.title}
         className="w-full hidden xl:inline-block h-full object-cover "
       />
       <div className="xl:bg-main b-dry fle-colo xl:bg-opacity-90 xl:absolute top-0 left-0 right-0 h-full ">
         <div className="container px-3 mx-auto 2xl:px-32 xl:grid grid-cols-3 flex-colo py-10 lg:py-20 gap-8 ">
           <div className="xl:col-span-1 w-full xl:order-none orderlast h-header bg-dry border border-gray-800 rounded-lg overflow-hidden">
             <img
-              src={movie.image}
+              src={`https://image.tmdb.org/t/p/original${movie?.poster_path}`}
               alt=""
               className="w-full h-full object-cover"
             />
@@ -24,7 +24,7 @@ function Movieinfo({ movie }) {
           <div className="col-span-2 md:grid grid-cols-5 gap-4 items-center">
             <div className="col-span-3 flex flex-col gap-10">
               <h1 className="xl:text-4xl capitalize font-sans text-2xl font-bold">
-                {movie.name}
+                {movie?.title}
               </h1>
               <div className="flex items-center gap-4 font-medium text-dryGray">
                 <div className="flex-colo bg-submain text-xs px-2 py-1">
@@ -33,7 +33,7 @@ function Movieinfo({ movie }) {
                 <FlexMovieItems movie={movie} />
               </div>
               {/* description */}
-              <p>{movie.desc}</p>
+              {/* <p>{movie.desc}</p> */}
               <div className="grid sm:grid-cols-5 grid-cols-3 p-6 bg-main border border-gray-800 rounded-lg">
                 {/* share */}
                 <div className="col-span-1 flex-colo  ">
@@ -51,7 +51,7 @@ function Movieinfo({ movie }) {
                 {/* watch button */}
                 <div className="sm:col-span-2 col flex justify-end font-medium text-sm ">
                   <Link
-                    to={`/watch/${movie?.name}`}
+                    to={`/watch/${movie?.id}`}
                     className="bg-dry hover:bg-submain transition border-2 border-submain rounded-full flex-row gap-4 w-full py-3 px-3 my-3 text-center relative "
                   >
                     <FaPlay className="w-3 h-4 absolute    md:left-4 lg:left-10 top-3.5" />
